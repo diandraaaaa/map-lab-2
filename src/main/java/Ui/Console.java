@@ -7,6 +7,8 @@ import model.Department;
 import model.Task;
 import model.Volunteer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Console {
@@ -115,8 +117,9 @@ public class Console {
         System.out.print("Enter Phone: ");
         String phone = scanner.nextLine();
 
+        List<Task> tasksDone = new ArrayList<>();
         // Create a new Volunteer object
-        Volunteer newVolunteer = new Volunteer(volunteerId, name, email, phone);
+        Volunteer newVolunteer = new Volunteer(volunteerId, name, email, phone, tasksDone);
 
         volunteerManager.save(newVolunteer);
     }
@@ -210,9 +213,9 @@ public class Console {
         int volunteerId = scanner.nextInt();
 
         // Create a new Volunteer object
-        Volunteer newVolunteer = new Volunteer(taskId, difficulty, taskDescription, duration, volunteerId);
+        Task newTask = new Task(taskId, difficulty, duration, volunteerId, taskDescription);
 
-        volunteerManager.save(newVolunteer);
+        taskManager.save(newTask);
     }
 
     private void deleteTask() {

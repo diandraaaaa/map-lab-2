@@ -1,7 +1,9 @@
 import Repository.VolunteerRepo;
+import model.Task;
 import model.Volunteer;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,8 +13,9 @@ class VolunteerTests {
     @Test
     void findByIdTest() {
         // Arrange
-        Volunteer volunteer1 = new Volunteer(1, "Oana", "oana@example.com", "0700000000");
-        Volunteer volunteer2 = new Volunteer(2, "Ana", "ana@example.com", "0700000001");
+        List<Task> tasksDone = new ArrayList<>();
+        Volunteer volunteer1 = new Volunteer(1, "Oana", "oana@example.com", "0700000000", tasksDone);
+        Volunteer volunteer2 = new Volunteer(2, "Ana", "ana@example.com", "0700000001", tasksDone);
         VolunteerRepo repo = new VolunteerRepo();
         repo.save(volunteer1);
         repo.save(volunteer2);
@@ -30,8 +33,9 @@ class VolunteerTests {
     @Test
     void deleteByIdTest() {
         // Arrange
-        Volunteer volunteer1 = new Volunteer(1, "Oana", "oana@example.com", "0700000000");
-        Volunteer volunteer2 = new Volunteer(2, "Ana", "ana@example.com", "0700000001");
+        List<Task> tasksDone = new ArrayList<>();
+        Volunteer volunteer1 = new Volunteer(1, "Oana", "oana@example.com", "0700000000", tasksDone);
+        Volunteer volunteer2 = new Volunteer(2, "Ana", "ana@example.com", "0700000001", tasksDone);
         VolunteerRepo repo = new VolunteerRepo();
         repo.save(volunteer1);
         repo.save(volunteer2);
@@ -65,9 +69,12 @@ class VolunteerTests {
 
     @Test
     void saveAndFindByIdMultipleVolunteersTest() {
+
         // Arrange
-        Volunteer volunteer1 = new Volunteer(1, "Oana", "oana@example.com", "0700000000");
-        Volunteer volunteer2 = new Volunteer(2, "Ana", "ana@example.com", "0700000001");
+        List<Task> tasksDone = new ArrayList<>();
+
+        Volunteer volunteer1 = new Volunteer(1, "Oana", "oana@example.com", "0700000000", tasksDone);
+        Volunteer volunteer2 = new Volunteer(2, "Ana", "ana@example.com", "0700000001", tasksDone);
         VolunteerRepo repo = new VolunteerRepo();
 
         // Act

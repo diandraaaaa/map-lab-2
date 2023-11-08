@@ -1,29 +1,24 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Volunteer implements Observer {
-    public int volunteer_id;
-    public String name;
-    public String email;
-    public String phone;
-    public List<Task> tasksDone ;
+    private int volunteerId;
+    private String name;
+    private String email;
+    private String phone;
+    private List<Task> tasksDone;
 
-    public List<Task> getTasksDone() {
-        return tasksDone;
-    }
-
-    public void setTasksDone(List<Task> tasksDone) {
+    public Volunteer(int volunteerId, String name, String email, String phone, List<Task> tasksDone) {
+        this.volunteerId = volunteerId;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
         this.tasksDone = tasksDone;
     }
 
-    public Volunteer(int taskId, String difficulty, String taskDescription, int duration, int volunteerId) {
-        tasksDone= new ArrayList<>();
-    }
-
     public int getVolunteerId() {
-        return volunteer_id;
+        return volunteerId;
     }
 
     public String getName() {
@@ -38,32 +33,16 @@ public class Volunteer implements Observer {
         return phone;
     }
 
-    public void setVolunteer_id(int volunteer_id) {
-        this.volunteer_id = volunteer_id;
+    public List<Task> getTasksDone() {
+        return tasksDone;
     }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Volunteer(int volunteer_id, String name, String email, String phone) {
-        this.volunteer_id = volunteer_id;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-    }
-
 
     @Override
     public void update(Task task) {
+        // Implementation of the update method
+    }
 
+    public static VolunteerBuilder builder() {
+        return new VolunteerBuilder();
     }
 }
