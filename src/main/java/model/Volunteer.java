@@ -1,12 +1,25 @@
 package model;
 
-public class Volunteer {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Volunteer implements Observer {
     public int volunteer_id;
     public String name;
     public String email;
     public String phone;
+    public List<Task> tasksDone ;
+
+    public List<Task> getTasksDone() {
+        return tasksDone;
+    }
+
+    public void setTasksDone(List<Task> tasksDone) {
+        this.tasksDone = tasksDone;
+    }
 
     public Volunteer(int taskId, String difficulty, String taskDescription, int duration, int volunteerId) {
+        tasksDone= new ArrayList<>();
     }
 
     public int getVolunteerId() {
@@ -49,4 +62,8 @@ public class Volunteer {
     }
 
 
+    @Override
+    public void update(Task task) {
+
+    }
 }
