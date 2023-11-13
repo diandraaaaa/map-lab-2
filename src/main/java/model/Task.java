@@ -3,6 +3,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Task {
     public int taskId;
@@ -65,6 +66,8 @@ public class Task {
 
     public void setTaskDescription(String taskDescription) {
         this.taskDescription = taskDescription;
+        if(Objects.equals(taskDescription, "Assignment Completed"))
+            notifyObservers();
     }
 
     public Task(int taskId, String difficulty, int duration, int volunteerId, String taskDescription) {

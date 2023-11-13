@@ -39,7 +39,7 @@ public class Volunteer implements Observer {
 
     @Override
     public void update(Task task) {
-        // Implementation of the update method
+        tasksDone.add(task);
     }
 
     public static VolunteerBuilder builder() {
