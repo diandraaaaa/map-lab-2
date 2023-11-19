@@ -27,3 +27,4 @@ public class President extends Volunteer {
         this.salary = salary;
     }
 }
+
