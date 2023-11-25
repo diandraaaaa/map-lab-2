@@ -7,6 +7,7 @@ public class VolunteerBuilder {
     private String name;
     private String email;
     private String phone;
+    private int departmentId;
     private List<Task> tasksDone;
 
     public VolunteerBuilder setVolunteerId(int volunteerId) {
@@ -34,7 +35,11 @@ public class VolunteerBuilder {
         return this;
     }
 
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
+    }
+
     public Volunteer build() {
-        return new Volunteer(volunteerId, name, email, phone, tasksDone);
+        return new Volunteer(volunteerId, name, email, phone, departmentId, tasksDone);
     }
 }

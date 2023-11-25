@@ -19,6 +19,10 @@ public class Volunteer implements Observer {
         this.tasksDone = tasksDone;
     }
 
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
     public int getVolunteerId() {
         return volunteerId;
     }
