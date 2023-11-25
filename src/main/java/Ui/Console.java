@@ -117,9 +117,13 @@ public class Console {
         System.out.print("Enter Phone: ");
         String phone = scanner.nextLine();
 
+        System.out.print("Enter Volunteer ID: ");
+        int departmentId = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+
         List<Task> tasksDone = new ArrayList<>();
         // Create a new Volunteer object
-        Volunteer newVolunteer = new Volunteer(volunteerId, name, email, phone, tasksDone);
+        Volunteer newVolunteer = new Volunteer(volunteerId, name, email, phone, departmentId, tasksDone);
 
         volunteerManager.save(newVolunteer);
     }
@@ -144,7 +148,7 @@ public class Console {
 
     private void viewDepartments() {
         for(Department department : departmentManager.findAll()){
-            System.out.println(department.getDepartmentId() +" "+ department.getName()+ " " + department.getCoordinatorId() + " " + department.getDescription() );
+            System.out.println(department.getDepartmentId() +" "+ department.getName() + " " + department.getDescription() );
         }
     }
 
@@ -162,11 +166,9 @@ public class Console {
         System.out.print("Enter description: ");
         String description = scanner.nextLine();
 
-        System.out.print("Enter coordinatorId: ");
-        int coordinatorId = scanner.nextInt();
 
         // Create a new Volunteer object
-        Department newDepartment = new Department(departmentId, name, description, coordinatorId);
+        Department newDepartment = new Department(departmentId, name, description);
         volunteerManager.save(newDepartment);
     }
 

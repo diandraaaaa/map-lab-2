@@ -5,7 +5,6 @@ public class Department {
     public String name;
     public String description;
 
-    public int coordinatorId;
 
     public int getDepartmentId() {
         return departmentId;
@@ -19,9 +18,6 @@ public class Department {
         return description;
     }
 
-    public int getCoordinatorId() {
-        return coordinatorId;
-    }
 
     public void setDepartmentId(int departmentId) {
         this.departmentId = departmentId;
@@ -35,14 +31,10 @@ public class Department {
         this.description = description;
     }
 
-    public void setCoordinator(int coordinator) {
-        this.coordinatorId = coordinatorId;
-    }
 
-    public Department(int departmentId, String name, String description, int coordinatorId) {
+    public Department(int departmentId, String name, String description) {
         this.departmentId = departmentId;
         this.name = name;
         this.description = description;
-        this.coordinatorId = coordinatorId;
     }
 }

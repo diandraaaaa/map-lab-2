@@ -7,13 +7,15 @@ public class Volunteer implements Observer {
     private String name;
     private String email;
     private String phone;
+    private int departmentId;
     private List<Task> tasksDone;
 
-    public Volunteer(int volunteerId, String name, String email, String phone, List<Task> tasksDone) {
+    public Volunteer(int volunteerId, String name, String email, String phone,int departmentId, List<Task> tasksDone) {
         this.volunteerId = volunteerId;
         this.name = name;
         this.email = email;
         this.phone = phone;
+        this.departmentId = departmentId;
         this.tasksDone = tasksDone;
     }
 
