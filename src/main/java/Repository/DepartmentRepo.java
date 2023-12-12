@@ -11,16 +11,11 @@ public class DepartmentRepo implements Repo {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "razvandiandra";
 
-    // Initialize ArrayList instead of List
-    private List<Department> departments = new ArrayList<>();
-
     public DepartmentRepo() {
-        // Load the JDBC driver
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error loading MySQL JDBC driver");
+            throw new RuntimeException("Error loading MySQL JDBC driver", e);
         }
     }
 
@@ -30,19 +25,30 @@ public class DepartmentRepo implements Repo {
             Department department = (Department) entity;
             try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
                  PreparedStatement preparedStatement = connection.prepareStatement(
-                         "INSERT INTO Department (departmentId, name, description) VALUES (?, ?, ?)")) {
-                preparedStatement.setInt(1, department.getDepartmentId());
-                preparedStatement.setString(2, department.getName());
-                preparedStatement.setString(3, department.getDescription());
+                         "INSERT INTO Department (name, description) VALUES (?, ?)",
+                         Statement.RETURN_GENERATED_KEYS)) {
+
+                preparedStatement.setString(1, department.getName());
+                preparedStatement.setString(2, department.getDescription());
                 preparedStatement.executeUpdate();
+
+                // Retrieve the generated departmentId
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        department.setDepartmentId(generatedKeys.getInt(1));
+                    }
+                }
+
             } catch (SQLException e) {
-                e.printStackTrace();
+                handleSQLException(e);
             }
         }
     }
 
     @Override
     public Department findById(int id) {
+        Department department = null;
+
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(
                      "SELECT * FROM Department WHERE departmentId = ?")) {
@@ -50,19 +56,17 @@ public class DepartmentRepo implements Repo {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                int departmentId = resultSet.getInt("departmentId");
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
 
-                return new Department(departmentId, name, description);
+                department = new Department(id, name, description);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleSQLException(e);
         }
 
-        return null;
+        return department;
     }
-
     @Override
     public void deleteById(int id) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
@@ -95,5 +99,8 @@ public class DepartmentRepo implements Repo {
         }
 
         return departments;
+    }
+    private void handleSQLException(SQLException e) {
+        e.printStackTrace();  // Log or handle the exception appropriately in a production environment
     }
 }

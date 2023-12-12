@@ -11,16 +11,11 @@ public class TaskRepo implements Repo {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "razvandiandra";
 
-    // Initialize ArrayList instead of List
-    private List<Task> tasks = new ArrayList<>();
-
     public TaskRepo() {
-        // Load the JDBC driver
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error loading MySQL JDBC driver");
+            throw new RuntimeException("Error loading MySQL JDBC driver", e);
         }
     }
 
@@ -30,21 +25,32 @@ public class TaskRepo implements Repo {
             Task task = (Task) entity;
             try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
                  PreparedStatement preparedStatement = connection.prepareStatement(
-                         "INSERT INTO Task (taskId, difficulty, duration, volunteerId, taskDescription) VALUES (?, ?, ?, ?, ?)")) {
-                preparedStatement.setInt(1, task.getTaskId());
-                preparedStatement.setString(2, task.getDifficulty());
-                preparedStatement.setInt(3, task.getDuration());
-                preparedStatement.setInt(4, task.getVolunteerId());
-                preparedStatement.setString(5, task.getTaskDescription());
+                         "INSERT INTO Task (difficulty, duration, volunteerId, taskDescription) VALUES (?, ?, ?, ?)",
+                         Statement.RETURN_GENERATED_KEYS)) {
+
+                preparedStatement.setString(1, task.getDifficulty());
+                preparedStatement.setInt(2, task.getDuration());
+                preparedStatement.setInt(3, task.getVolunteerId());
+                preparedStatement.setString(4, task.getTaskDescription());
                 preparedStatement.executeUpdate();
+
+                // Retrieve the generated taskId
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        task.setTaskId(generatedKeys.getInt(1));
+                    }
+                }
+
             } catch (SQLException e) {
-                e.printStackTrace();
+                handleSQLException(e);
             }
         }
     }
 
     @Override
     public Object findById(int id) {
+        Task task = null;
+
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(
                      "SELECT * FROM Task WHERE taskId = ?")) {
@@ -52,21 +58,19 @@ public class TaskRepo implements Repo {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                int taskId = resultSet.getInt("taskId");
                 String difficulty = resultSet.getString("difficulty");
                 int duration = resultSet.getInt("duration");
                 int volunteerId = resultSet.getInt("volunteerId");
                 String taskDescription = resultSet.getString("taskDescription");
 
-                return new Task(taskId, difficulty, duration, volunteerId, taskDescription);
+                task = new Task(id, difficulty, duration, volunteerId, taskDescription);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            handleSQLException(e);
         }
 
-        return null;
+        return task;
     }
-
     @Override
     public void deleteById(int id) {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
@@ -101,5 +105,8 @@ public class TaskRepo implements Repo {
         }
 
         return tasks;
+    }
+    private void handleSQLException(SQLException e) {
+        e.printStackTrace();  // Log or handle the exception appropriately in a production environment
     }
 }

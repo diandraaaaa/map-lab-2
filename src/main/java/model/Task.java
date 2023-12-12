@@ -1,18 +1,27 @@
 package model;
 
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Task {
-    public int taskId;
-    public String difficulty;
-    public int duration;
-    public int volunteerId;
-    public String taskDescription;
 
+@Entity
+public class Task {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int taskId;
+
+    private String difficulty;
+    private int duration;
+    private int volunteerId;
+    private String taskDescription;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<Observer> observers = new ArrayList<>();
+
+    // Constructors, getters, setters, and other methods
 
     public void addObserver(Observer observer) {
         observers.add(observer);
@@ -28,12 +37,26 @@ public class Task {
         }
     }
 
-    public int getTaskId() {
-        return taskId;
+    // Default constructor required by JPA
+    public Task() {
     }
 
-    public void setTaskId(int taskId) {
+    // Constructor for essential fields
+    public Task(int taskId, String difficulty, int duration, int volunteerId, String taskDescription) {
         this.taskId = taskId;
+        this.difficulty = difficulty;
+        this.duration = duration;
+        this.volunteerId = volunteerId;
+        this.taskDescription = taskDescription;
+        if (Objects.equals(taskDescription, "Assignment Completed")) {
+            notifyObservers();
+        }
+    }
+
+    // Getters and setters
+
+    public int getTaskId() {
+        return taskId;
     }
 
     public String getDifficulty() {
@@ -66,15 +89,14 @@ public class Task {
 
     public void setTaskDescription(String taskDescription) {
         this.taskDescription = taskDescription;
-        if(Objects.equals(taskDescription, "Assignment Completed"))
+        if (Objects.equals(taskDescription, "Assignment Completed")) {
             notifyObservers();
+        }
     }
 
-    public Task(int taskId, String difficulty, int duration, int volunteerId, String taskDescription) {
+    public void setTaskId(int taskId) {
         this.taskId = taskId;
-        this.difficulty = difficulty;
-        this.duration = duration;
-        this.volunteerId = volunteerId;
-        this.taskDescription = taskDescription;
     }
+
+    // Other methods if needed
 }

@@ -1,10 +1,28 @@
 package model;
 
-public class Department {
-    public int departmentId;
-    public String name;
-    public String description;
+import jakarta.persistence.*;
 
+
+@Entity
+public class Department {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int departmentId;
+    private String name;
+    private String description;
+
+    // Default constructor required by JPA
+    public Department() {
+    }
+
+    // Constructor for essential fields
+    public Department(int departmentId, String name, String description) {
+        this.departmentId = departmentId;
+        this.name = name;
+        this.description = description;
+    }
+
+    // Getters and setters
 
     public int getDepartmentId() {
         return departmentId;
@@ -14,27 +32,21 @@ public class Department {
         return name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-
-    public Department(int departmentId, String name, String description) {
+    public void setDepartmentId(int departmentId) {
         this.departmentId = departmentId;
-        this.name = name;
-        this.description = description;
     }
+
+    // Other methods if needed
 }
