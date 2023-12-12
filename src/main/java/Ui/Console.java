@@ -96,7 +96,7 @@ public class Console {
 
     private void viewVolunteers() {
         for( Volunteer volunteer : volunteerManager.findAll()){
-            System.out.println(volunteer.getVolunteerId() + " " + volunteer.getName() + " " + volunteer.getEmail() + " " + volunteer.getPhone());
+           // System.out.println(volunteer.getVolunteerId() + " " + volunteer.getName() + " " + volunteer.getEmail() + " " + volunteer.getPhone());
         }
     }
 
@@ -123,9 +123,9 @@ public class Console {
 
         List<Task> tasksDone = new ArrayList<>();
         // Create a new Volunteer object
-        Volunteer newVolunteer = new Volunteer(volunteerId, name, email, phone, departmentId, tasksDone);
+        //Volunteer newVolunteer = new Volunteer(volunteerId, name, email, phone, departmentId, tasksDone);
 
-        volunteerManager.save(newVolunteer);
+       // volunteerManager.save(newVolunteer);
     }
 
     private void deleteVolunteer() {

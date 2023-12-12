@@ -1,7 +1,6 @@
 package model;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -14,79 +13,88 @@ public class Volunteer implements Observer {
     private String email;
     private String phone;
 
-    private int departmentId;
+    @ManyToOne
+    @JoinColumn(name = "departmentId", referencedColumnName = "departmentId")
+    private Department department;
 
     @OneToMany(mappedBy = "volunteer", cascade = CascadeType.ALL)
     private List<Task> tasksDone;
 
-    // Default constructor required by JPA
+    @OneToOne(mappedBy = "volunteer", cascade = CascadeType.ALL)
+    private Contract contract;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Volunteer_Skill",
+            joinColumns = @JoinColumn(name = "volunteerId"),
+            inverseJoinColumns = @JoinColumn(name = "skillId")
+    )
+    private List<Skill> skills;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Volunteer_Training",
+            joinColumns = @JoinColumn(name = "volunteerId"),
+            inverseJoinColumns = @JoinColumn(name = "trainingId")
+    )
+    private List<Training> trainings;
+
+    // ... rest of your code
+
     public Volunteer() {
     }
 
-    // Constructor for dependency injection
-    public Volunteer(int volunteerId, String name, String email, String phone, int departmentId, List<Task> tasksDone) {
+    public Volunteer(int volunteerId, String name, String email, String phone,
+                     Department department, List<Task> tasksDone,
+                     Contract contract, List<Skill> skills, List<Training> trainings) {
         this.volunteerId = volunteerId;
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.departmentId = departmentId;
+        this.department = department;
         this.tasksDone = tasksDone;
+        this.contract = contract;
+        this.skills = skills;
+        this.trainings = trainings;
     }
 
-    public int getVolunteerId() {
-        return volunteerId;
+    // ... rest of your code
+
+    public Department getDepartment() {
+        return department;
     }
 
-    public String getName() {
-        return name;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
-    public String getEmail() {
-        return email;
+    public Contract getContract() {
+        return contract;
     }
 
-    public String getPhone() {
-        return phone;
+    public void setContract(Contract contract) {
+        this.contract = contract;
     }
 
-    public int getDepartmentId() {
-        return departmentId;
+    public List<Skill> getSkills() {
+        return skills;
     }
 
-    public List<Task> getTasksDone() {
-        return tasksDone;
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
+    }
+
+    public List<Training> getTrainings() {
+        return trainings;
+    }
+
+    public void setTrainings(List<Training> trainings) {
+        this.trainings = trainings;
     }
 
     @Override
     public void update(Task task) {
-        tasksDone.add(task);
-    }
 
-    public static VolunteerBuilder builder() {
-        return new VolunteerBuilder();
-    }
-
-    public void setVolunteerId(int volunteerId) {
-        this.volunteerId = volunteerId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public void setTasksDone(List<Task> tasksDone) {
-        this.tasksDone = tasksDone;
     }
 }
+
