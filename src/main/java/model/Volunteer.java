@@ -7,10 +7,16 @@ import java.util.List;
 public class Volunteer implements Observer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "volunteerId")
     private int volunteerId;
 
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "phone")
     private String phone;
 
     @ManyToOne
@@ -39,6 +45,13 @@ public class Volunteer implements Observer {
     )
     private List<Training> trainings;
 
+    @OneToOne(mappedBy = "volunteer", cascade = CascadeType.ALL)
+    private Award award;
+
+    // Assuming you have a many-to-many relationship with projects
+    @ManyToMany(mappedBy = "volunteers")
+    private List<Project> projects;
+
     // ... rest of your code
 
     public Volunteer() {
@@ -46,7 +59,8 @@ public class Volunteer implements Observer {
 
     public Volunteer(int volunteerId, String name, String email, String phone,
                      Department department, List<Task> tasksDone,
-                     Contract contract, List<Skill> skills, List<Training> trainings) {
+                     Contract contract, List<Skill> skills, List<Training> trainings,
+                     Award award, List<Project> projects) {
         this.volunteerId = volunteerId;
         this.name = name;
         this.email = email;
@@ -56,65 +70,34 @@ public class Volunteer implements Observer {
         this.contract = contract;
         this.skills = skills;
         this.trainings = trainings;
+        this.award = award;
+        this.projects = projects;
     }
 
     // ... rest of your code
 
-    public Department getDepartment() {
-        return department;
+    // Getters and setters for the new fields
+
+    public Award getAward() {
+        return award;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setAward(Award award) {
+        this.award = award;
     }
 
-    public Contract getContract() {
-        return contract;
+    public List<Project> getProjects() {
+        return projects;
     }
 
-    public void setContract(Contract contract) {
-        this.contract = contract;
-    }
-
-    public List<Skill> getSkills() {
-        return skills;
-    }
-
-    public void setSkills(List<Skill> skills) {
-        this.skills = skills;
-    }
-
-    public List<Training> getTrainings() {
-        return trainings;
-    }
-
-    public void setTrainings(List<Training> trainings) {
-        this.trainings = trainings;
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 
     @Override
     public void update(Task task) {
-
+        // Implementation of the update method
     }
 
-    public int getVolunteerId() {
-        return volunteerId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public List<Task> getTasksDone() {
-        return tasksDone;
-    }
+    // ... rest of your code
 }
-
