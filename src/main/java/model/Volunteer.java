@@ -96,5 +96,25 @@ public class Volunteer implements Observer {
     public void update(Task task) {
 
     }
+
+    public int getVolunteerId() {
+        return volunteerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public List<Task> getTasksDone() {
+        return tasksDone;
+    }
 }
 
